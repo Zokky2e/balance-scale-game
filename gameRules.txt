@@ -1,0 +1,16 @@
+Balance Scale Game
+
+5players start the game with 0 points
+choose random number between 0 and 100
+computer calculates avg from 5 choices and multiply with 0.8
+player closest to that number doesnt lose a point
+
+the player that gets to -10 points gets GAME OVER
+
+every time a player loses a new rule is added
+after 1 person: 
+if two or more players guess the same number they all lose points
+after 2 people:
+if a player guesses the number that gets calculated other players lose 2 instead of 1 point
+after 3 people:
+if a player chooses 0 as their number the other player will win if they choose 100
