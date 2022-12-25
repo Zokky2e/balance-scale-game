@@ -7,7 +7,7 @@ player closest to that number doesnt lose a point
 
 the player that gets to -10 points gets GAME OVER
 
-every time a player loses a new rule is added
+every time a player loses gets a GAME OVER screen a new rule is added
 after 1 person: 
 if two or more players guess the same number they all lose points
 after 2 people:
