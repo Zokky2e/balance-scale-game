@@ -13,16 +13,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-span {
-  color: #6c79c4;
-}
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-.players {
-  display: flex;
-  gap: 16px;
-}
