@@ -11,3 +11,9 @@ span {
   display: flex;
   gap: 16px;
 }
+.visible {
+  visibility: visible;
+}
+.hidden {
+  visibility: hidden;
+}

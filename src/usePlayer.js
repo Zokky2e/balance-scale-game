@@ -2,15 +2,15 @@ import { useState } from "react";
 
 function usePlayer(props) {
   const name = props.Name;
-  const [playerInput, setPlayerInput] = useState("");
-  const [playerPoints, setPlayerPoints] = useState(0);
+  const [input, setInput] = useState("");
+  const [points, setPoints] = useState(0);
   const [isGameOver, setIsGameOver] = useState(false);
   const player = {
     name,
-    playerInput,
-    setPlayerInput,
-    playerPoints,
-    setPlayerPoints,
+    input,
+    setInput,
+    points,
+    setPoints,
   };
   return player;
 }
