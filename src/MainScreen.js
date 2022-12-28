@@ -1,5 +1,14 @@
+import {
+  collection,
+  doc,
+  getDocs,
+  onSnapshot,
+  query,
+  setDoc,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { db } from "./Firebase";
 import usePlayer from "./usePlayer";
 
 function MainScreen() {
@@ -27,22 +36,66 @@ function MainScreen() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roundWinner]);
+  async function fetchDocs() {
+    const docs = await getDocs(query(collection(db, "game")));
+    docs.forEach((doc) => {
+      switch (doc.id) {
+        case "Player1": {
+          player1.setPoints(doc.data()["points"]);
+          player1.setInput(doc.data()["number"]);
+          break;
+        }
+        case "Player2": {
+          player2.setPoints(doc.data()["points"]);
+          player2.setInput(doc.data()["number"]);
+          break;
+        }
+        case "Player3": {
+          player3.setPoints(doc.data()["points"]);
+          player3.setInput(doc.data()["number"]);
+          break;
+        }
+        case "Player4": {
+          player4.setPoints(doc.data()["points"]);
+          player4.setInput(doc.data()["number"]);
+          break;
+        }
+        case "Player5": {
+          player5.setPoints(doc.data()["points"]);
+          player5.setInput(doc.data()["number"]);
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+    });
+  }
+  useEffect(() => {
+    fetchDocs();
+  }, []);
+  async function resetGame() {
+    const docNames = ["Player1", "Player2", "Player3", "Player4", "Player5"];
+    docNames.forEach((docName) => {
+      setDoc(doc(db, "game", docName), {
+        number: 100,
+        points: 0,
+      });
+    });
+    fetchDocs();
+    setIsRoundDone(false);
+  }
   function calculate() {
     let players = [player1, player2, player3, player4, player5];
+    players.filter((player) => parseInt(player.points) > -10);
     setIsRoundDone(true);
     let winner = 0;
-    if (
-      players.some((player) => {
-        return player.input === "";
-      })
-    ) {
-      setResult("wrong input!");
-      return;
-    }
+
     let average = 0;
     players.forEach((player) => {
       average = average + parseInt(player.input);
     });
+    //TODO fix average when player dies
     average /= players.length;
     average = (average * 0.8).toFixed(2);
     setResult(average);
@@ -58,15 +111,13 @@ function MainScreen() {
     for (let i = 0; i < players.length; i++) {
       if (i !== winner) {
         players[i].setPoints((prev) => prev - 1);
+        const docName = players[i].name.replace(" ", "");
+        setDoc(doc(db, "game", docName), {
+          number: players[i].input,
+          points: players[i].points - 1,
+        });
       }
     }
-  }
-  function clearInputs() {
-    let players = [player1, player2, player3, player4, player5];
-    players.forEach((player) => {
-      player.setInput("");
-    });
-    setIsRoundDone(false);
   }
   return (
     <div className="container">
@@ -79,13 +130,8 @@ function MainScreen() {
             <p>
               {player1.name}: <span>{player1.points} points</span>
             </p>
-            <input
-              type="number"
-              value={player1.input}
-              onChange={(e) => {
-                player1.setInput(e.target.value);
-              }}
-            />
+            <p>Number Chosen:</p>
+            <p> {player1.input}</p>
             <br />
             <Link
               to={"/player"}
@@ -103,13 +149,8 @@ function MainScreen() {
             <p>
               {player2.name}: <span>{player2.points} points</span>
             </p>
-            <input
-              type="number"
-              value={player2.input}
-              onChange={(e) => {
-                player2.setInput(e.target.value);
-              }}
-            />
+            <p>Number Chosen: </p>
+            <p>{player2.input}</p>
             <br />
             <Link
               to={"/player"}
@@ -127,13 +168,8 @@ function MainScreen() {
             <p>
               {player3.name}: <span>{player3.points} points</span>
             </p>
-            <input
-              type="number"
-              value={player3.input}
-              onChange={(e) => {
-                player3.setInput(e.target.value);
-              }}
-            />
+            <p>Number Chosen:</p>
+            <p> {player3.input}</p>
             <br />
             <Link
               to={"/player"}
@@ -151,13 +187,8 @@ function MainScreen() {
             <p>
               {player4.name}: <span>{player4.points} points</span>
             </p>
-            <input
-              type="number"
-              value={player4.input}
-              onChange={(e) => {
-                player4.setInput(e.target.value);
-              }}
-            />
+            <p>Number Chosen:</p>
+            <p> {player4.input}</p>
             <br />
             <Link
               to={"/player"}
@@ -175,13 +206,8 @@ function MainScreen() {
             <p>
               {player5.name}: <span>{player5.points} points</span>
             </p>
-            <input
-              type="number"
-              value={player5.input}
-              onChange={(e) => {
-                player5.setInput(e.target.value);
-              }}
-            />
+            <p>Number Chosen: </p>
+            <p>{player5.input}</p>
             <br />
             <Link
               to={"/player"}
@@ -202,7 +228,10 @@ function MainScreen() {
         <button onClick={calculate}>Do calculation</button>
         <p>{roundWinner}</p>
       </div>
-      <div>{isRoundDone && <button onClick={clearInputs}>Clear</button>}</div>
+      <div>
+        <button onClick={resetGame}>Reset Game</button>
+        <button onClick={fetchDocs}>Update Numbers</button>
+      </div>
     </div>
   );
 }

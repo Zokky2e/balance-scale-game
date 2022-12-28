@@ -17,6 +17,7 @@ function KeyPad(props) {
       <div className="spacer"></div>
       {numbers.map((number) => (
         <button
+          key={number}
           onClick={() => {
             props.setNumber(number);
           }}
