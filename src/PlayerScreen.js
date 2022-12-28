@@ -19,6 +19,7 @@ function PlayerScreen() {
     });
   }
   useEffect(() => {
+    document.title = `${player.name} Screen`;
     onSnapshot(doc(db, "game", docName), (querySnapshot) => {
       setNumber(querySnapshot.data()["number"]);
       setPoints(querySnapshot.data()["points"]);

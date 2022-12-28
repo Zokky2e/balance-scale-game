@@ -7,8 +7,22 @@ span {
   align-items: center;
   flex-direction: column;
 }
-.players {
+.header {
+  width: 100%;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header button {
+  width: 50px;
+}
+.header-spacer {
+  width: 50px;
+}
+.players {
+  width: 100%;
+  display: flex;
+  justify-content: center;
   gap: 16px;
 }
 .visible {
@@ -16,6 +30,10 @@ span {
 }
 .hidden {
   visibility: hidden;
+}
+.rules div:first-of-type {
+  display: flex;
+  justify-content: space-between;
 }
 a {
   text-decoration: none;

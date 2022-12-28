@@ -72,6 +72,7 @@ function MainScreen() {
     });
   }
   useEffect(() => {
+    document.title = "Balance Scale Game";
     fetchDocs();
   }, []);
   async function resetGame() {
@@ -99,15 +100,19 @@ function MainScreen() {
     average /= players.length;
     average = (average * 0.8).toFixed(2);
     setResult(average);
-    let difference = 100;
-    for (let i = 0; i < players.length; i++) {
+    let difference = Math.abs(parseInt(players[0].input) - average);
+    for (let i = 1; i < players.length; i++) {
       let newDifference = Math.abs(parseInt(players[i].input) - average);
-      if (newDifference < difference) {
+      if (newDifference === difference) {
+        winner = -1;
+      } else if (newDifference < difference) {
         difference = newDifference;
         winner = i;
       }
     }
-    setRoundWinner("Winner: " + players[winner].name);
+    winner !== -1
+      ? setRoundWinner("Winner: " + players[winner].name)
+      : setRoundWinner("No one wins");
     for (let i = 0; i < players.length; i++) {
       if (i !== winner) {
         players[i].setPoints((prev) => prev - 1);
@@ -121,8 +126,16 @@ function MainScreen() {
   }
   return (
     <div className="container">
-      <div>
+      <div className="header">
+        <button
+          onClick={() => {
+            navigate("/rules", { replace: true });
+          }}
+        >
+          Rules
+        </button>
         <h2>Balance Scale Game</h2>
+        <div className="header-spacer"></div>
       </div>
       <div className="players">
         {player1.points >= -10 && (
