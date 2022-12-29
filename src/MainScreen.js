@@ -1,11 +1,4 @@
-import {
-  collection,
-  doc,
-  getDocs,
-  onSnapshot,
-  query,
-  setDoc,
-} from "firebase/firestore";
+import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { db } from "./Firebase";
@@ -74,6 +67,7 @@ function MainScreen() {
   useEffect(() => {
     document.title = "Balance Scale Game";
     fetchDocs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   async function resetGame() {
     const docNames = ["Player1", "Player2", "Player3", "Player4", "Player5"];
@@ -87,8 +81,9 @@ function MainScreen() {
     setIsRoundDone(false);
   }
   function calculate() {
-    let players = [player1, player2, player3, player4, player5];
-    players.filter((player) => parseInt(player.points) > -10);
+    let allPlayers = [player1, player2, player3, player4, player5];
+    let players = allPlayers.filter((player) => parseInt(player.points) > -10);
+    console.log(players);
     setIsRoundDone(true);
     let winner = 0;
 
@@ -119,7 +114,10 @@ function MainScreen() {
         const docName = players[i].name.replace(" ", "");
         setDoc(doc(db, "game", docName), {
           number: players[i].input,
-          points: players[i].points - 1,
+          points:
+            players[i].input === -10
+              ? players[i].points
+              : players[i].points - 1,
         });
       }
     }
@@ -138,14 +136,22 @@ function MainScreen() {
         <div className="header-spacer"></div>
       </div>
       <div className="players">
-        {player1.points >= -10 && (
-          <div className="container">
+        <div className={player1.points > -10 ? "container" : "container dead"}>
+          <p>
+            {player1.name}: <span>{player1.points} points</span>
+          </p>
+          {player1.points > -10 ? (
+            <>
+              <p>Number Chosen: </p>
+              <p>{player1.input}</p>
+            </>
+          ) : (
             <p>
-              {player1.name}: <span>{player1.points} points</span>
+              <span>Dead</span>
             </p>
-            <p>Number Chosen:</p>
-            <p> {player1.input}</p>
-            <br />
+          )}
+          <br />
+          {player1.points > -10 && (
             <Link
               to={"/player"}
               state={{
@@ -155,16 +161,24 @@ function MainScreen() {
             >
               Go to {player1.name} Screen
             </Link>
-          </div>
-        )}
-        {player2.points >= -10 && (
-          <div className="container">
+          )}
+        </div>
+        <div className={player2.points > -10 ? "container" : "container dead"}>
+          <p>
+            {player2.name}: <span>{player2.points} points</span>
+          </p>
+          {player2.points > -10 ? (
+            <>
+              <p>Number Chosen: </p>
+              <p>{player2.input}</p>
+            </>
+          ) : (
             <p>
-              {player2.name}: <span>{player2.points} points</span>
+              <span>Dead</span>
             </p>
-            <p>Number Chosen: </p>
-            <p>{player2.input}</p>
-            <br />
+          )}
+          <br />
+          {player2.points > -10 && (
             <Link
               to={"/player"}
               state={{
@@ -174,16 +188,25 @@ function MainScreen() {
             >
               Go to {player2.name} Screen
             </Link>
-          </div>
-        )}
-        {player3.points >= -10 && (
-          <div className="container">
+          )}
+        </div>
+
+        <div className={player3.points > -10 ? "container" : "container dead"}>
+          <p>
+            {player3.name}: <span>{player3.points} points</span>
+          </p>
+          {player3.points > -10 ? (
+            <>
+              <p>Number Chosen: </p>
+              <p>{player3.input}</p>
+            </>
+          ) : (
             <p>
-              {player3.name}: <span>{player3.points} points</span>
+              <span>Dead</span>
             </p>
-            <p>Number Chosen:</p>
-            <p> {player3.input}</p>
-            <br />
+          )}
+          <br />
+          {player3.points > -10 && (
             <Link
               to={"/player"}
               state={{
@@ -193,16 +216,24 @@ function MainScreen() {
             >
               Go to {player3.name} Screen
             </Link>
-          </div>
-        )}
-        {player4.points >= -10 && (
-          <div className="container">
+          )}
+        </div>
+        <div className={player4.points > -10 ? "container" : "container dead"}>
+          <p>
+            {player4.name}: <span>{player4.points} points</span>
+          </p>
+          {player4.points > -10 ? (
+            <>
+              <p>Number Chosen: </p>
+              <p>{player4.input}</p>
+            </>
+          ) : (
             <p>
-              {player4.name}: <span>{player4.points} points</span>
+              <span>Dead</span>
             </p>
-            <p>Number Chosen:</p>
-            <p> {player4.input}</p>
-            <br />
+          )}
+          <br />
+          {player4.points > -10 && (
             <Link
               to={"/player"}
               state={{
@@ -212,16 +243,24 @@ function MainScreen() {
             >
               Go to {player4.name} Screen
             </Link>
-          </div>
-        )}
-        {player5.points >= -10 && (
-          <div className="container">
+          )}
+        </div>
+        <div className={player5.points > -10 ? "container" : "container dead"}>
+          <p>
+            {player5.name}: <span>{player5.points} points</span>
+          </p>
+          {player5.points > -10 ? (
+            <>
+              <p>Number Chosen: </p>
+              <p>{player5.input}</p>
+            </>
+          ) : (
             <p>
-              {player5.name}: <span>{player5.points} points</span>
+              <span>Dead</span>
             </p>
-            <p>Number Chosen: </p>
-            <p>{player5.input}</p>
-            <br />
+          )}
+          <br />
+          {player5.points > -10 && (
             <Link
               to={"/player"}
               state={{
@@ -231,15 +270,15 @@ function MainScreen() {
             >
               Go to {player5.name} Screen
             </Link>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       <div className="container">
         <p className={isRoundDone ? "visible" : "hidden"}>
           Calculated result: {result}
         </p>
         <button onClick={calculate}>Do calculation</button>
-        <p>{roundWinner}</p>
+        <p className={isRoundDone ? "visible" : "hidden"}>{roundWinner}</p>
       </div>
       <div>
         <button onClick={resetGame}>Reset Game</button>

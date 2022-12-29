@@ -15,16 +15,22 @@ function KeyPad(props) {
     <div className="numbers-container">
       {" "}
       <div className="spacer"></div>
-      {numbers.map((number) => (
-        <button
-          key={number}
-          onClick={() => {
-            props.setNumber(number);
-          }}
-        >
-          {number}
-        </button>
-      ))}
+      {numbers.map((number) =>
+        props.isDead ? (
+          <button disabled style={{ cursor: "not-allowed" }}>
+            {number}
+          </button>
+        ) : (
+          <button
+            key={number}
+            onClick={() => {
+              props.setNumber(number);
+            }}
+          >
+            {number}
+          </button>
+        )
+      )}
     </div>
   );
 }

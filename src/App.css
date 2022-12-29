@@ -25,6 +25,12 @@ span {
   justify-content: center;
   gap: 16px;
 }
+.dead {
+  color: #717171;
+}
+.dead span {
+  color: #951212;
+}
 .visible {
   visibility: visible;
 }

@@ -24,21 +24,36 @@ function PlayerScreen() {
       setNumber(querySnapshot.data()["number"]);
       setPoints(querySnapshot.data()["points"]);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="container">
+    <div className={points > -10 ? "container" : "container dead"}>
       <p>
         {player.name}: <span>{points} points</span>
       </p>
-      <p>{number}</p>
-      <KeyPad number={number} setNumber={(e) => setNumber(e)} />
-      <button
-        onClick={() => {
-          savePlayerChoice();
-        }}
-      >
-        Confirm
-      </button>
+      {points > -10 ? <p>{number}</p> : <p>Dead</p>}
+      <KeyPad
+        number={number}
+        setNumber={(e) => setNumber(e)}
+        isDead={!(points > -10)}
+      />
+      {points > -10 ? (
+        <button
+          onClick={() => {
+            savePlayerChoice();
+          }}
+        >
+          Confirm
+        </button>
+      ) : (
+        <button
+          onClick={() => {
+            navigate("/", { replace: true });
+          }}
+        >
+          Back
+        </button>
+      )}
     </div>
   );
 }
